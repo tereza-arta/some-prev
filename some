@@ -1,0 +1,50 @@
+#ECR resources
+resource "aws_ecr_repository" "for-db" {
+  name = "db"
+  image_tag_mutability = "MUTABLE"
+}
+
+data "aws_caller_identity" "current" {}
+
+resource "aws_ecr_lifecycle_policy" "example" {
+  repository = aws_ecr_repository.for-db.name
+
+  policy = <<EOF
+{
+    "rules": [
+        {
+            "rulePriority": 1,
+            "description": "Keep last 3 images",
+            "selection": {
+                "tagStatus": "any",
+                "countType": "imageCountMoreThan",
+                "countNumber": 3
+            },
+            "action": {
+                "type": "expire"
+            }
+        }
+    ]
+}
+EOF
+}
+
+resource "null_resource" "docker_packaging" {
+	
+	  provisioner "local-exec" {
+	    command = <<EOF
+	    aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${data.aws_caller_identity.current.account_id}.dkr.ecr.eu-north-1.amazonaws.com
+	    docker build -t "${aws_ecr_repository.for-db.repository_url}:latest" -f db/Dockerfile .
+	    docker push "${aws_ecr_repository.for-db.repository_url}:latest"
+	    EOF
+	  }
+	
+
+	  triggers = {
+	    "run_at" = timestamp()
+	  }
+	
+
+	  depends_on = [
+	    aws_ecr_repository.for-db,
+	  ]

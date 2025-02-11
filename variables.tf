@@ -1,28 +1,11 @@
-variable "sg_ingress_cnt" {
-  type    = number
-  default = 3
+variable "enable_net" {
+  type = bool
+  default = true
+  description = "Enable network module or not"
 }
 
-variable "ing_port_range" {
-  type        = list(number)
-  default     = [22, 80, 5000, 3000]
-  description = "List of SG Inbound rules destination"
+variable "enable_lb" {
+  type = bool
+  default = true
+  description = "Enable load-balancer module or not"
 }
-
-variable "protocol" {
-  type    = list(string)
-  default = ["tcp", "udp"]
-}
-
-variable "sg_egress_cnt" {
-  type    = number
-  default = 1
-}
-
-variable "eg_port_range" {
-  type        = list(number)
-  default     = [0]
-  description = "List of SG Outbound rules destination"
-}
-
-
