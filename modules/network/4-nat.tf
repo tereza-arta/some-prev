@@ -1,6 +1,6 @@
 resource "aws_eip" "eip" {
   count = var.az_cnt
-  vpc = true
+  domain = "vpc"
   depends_on = [aws_internet_gateway.igw]
 
   tags = {

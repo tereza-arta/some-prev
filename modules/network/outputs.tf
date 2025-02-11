@@ -27,15 +27,15 @@ output "priv_sub_id" {
 }
 
 output "eip_id" {
-  value = aws_eip.eip.id
+  value = aws_eip.eip.*.id
 }
 
 output "eip_pub_ip" {
-  value = aws_eip.eip.public_ip
+  value = aws_eip.eip.*.public_ip
 }
 
 output "nat_id" {
-  value = aws_nat_gateway.nat.id
+  value = aws_nat_gateway.nat.*.id
 }
 
 output "pub_rt_id" {
@@ -43,16 +43,16 @@ output "pub_rt_id" {
 }
 
 output "priv_rt_id" {
-  value = aws_route_table.for_priv_sub.id
+  value = aws_route_table.for_priv_sub.*.id
 }
 
 
 output "pub_rt_assoc_id" {
-  value = aws_route_table_association.pub_sub_assoc.id
+  value = aws_route_table_association.pub_sub_assoc.*.id
 }
 
 output "priv_rt_assoc_id" {
-  value = aws_route_table_association.priv_sub_assoc.id
+  value = aws_route_table_association.priv_sub_assoc.*.id
 }
 
 output "lb_sg_id" {
@@ -60,6 +60,6 @@ output "lb_sg_id" {
 }
 
 output "ecs_sg_id" {
-  value = aws_security_group.for_ecs.id
+  value = aws_security_group.for_ecs.*.id
 }
 

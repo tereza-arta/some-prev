@@ -3,11 +3,11 @@ FROM node AS builder
 
 WORKDIR /app
 
-COPY source_code/package*.json ./
+COPY ./source_code/package*.json ./
 
 RUN npm i react-scripts@latest
 
-COPY source_code/ .
+COPY ./source_code/ .
 
 RUN npm run build
 

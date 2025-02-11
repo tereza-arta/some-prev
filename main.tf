@@ -10,3 +10,8 @@ module "lb" {
   pub_subnets = module.net[0].pub_sub_id
   sec_group = module.net[0].lb_sg_id
 }
+
+module "ecr" {
+  source = "./modules/ecr"
+  count = var.enable_ecr ? 1 : 0
+}

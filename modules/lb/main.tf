@@ -1,6 +1,6 @@
 resource "aws_elb" "lb" {
   name            = var.elb_name
-  subnets         = [var.pub_subnets]
+  subnets         = [element(var.pub_subnets, length(var.pub_subnets))]
   security_groups = [var.sec_group]
 
   listener {

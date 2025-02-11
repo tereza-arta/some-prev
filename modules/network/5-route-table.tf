@@ -30,5 +30,5 @@ resource "aws_route_table_association" "pub_sub_assoc" {
 resource "aws_route_table_association" "priv_sub_assoc" {
   count = var.az_cnt
   subnet_id = element(aws_subnet.priv[*].id, count.index)
-  route_table_id = aws_route_table.for_priv_sub.id
+  route_table_id = aws_route_table.for_priv_sub[count.index].id
 }

@@ -3,7 +3,7 @@ variable "elb_name" {
 }
 
 variable "pub_subnets" {
-  type        = any
+  #type        = any
   description = "Get id from Public Subnets"
 }
 

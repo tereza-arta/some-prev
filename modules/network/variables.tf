@@ -73,7 +73,7 @@ variable "default_gateway" {
 
 variable "rt_tag" {
   default = "Nondefault Route Table"
-  descripton = "Tag for second RT"
+  description = "Tag for second RT"
 }
 
 variable "eip_tag" {
@@ -108,14 +108,60 @@ variable "sg_cnt" {
 }
 
 variable "sg_ingress" {
-    type        = map(map(any))
-    default     = {
-        rule_1 = {from=80, to=80, proto="tcp", cidr="0.0.0.0/0", desc="test"}
-        rule_2 = {from=5432, to=5432, proto="tcp", cidr="0.0.0.0/0", desc="test"}
-        rule_2 = {from=5000, to=5000, proto="tcp", cidr="0.0.0.0/0", desc="test"}
-        rule_2 = {from=3000, to=3000, proto="tcp", cidr="0.0.0.0/0", desc="test"}
-    }
+    type = list(object({
+      from   = number
+      to    = number
+      proto    = string
+      cidr  = string
+      desc = string
+    }))
+    default     = [
+        {
+          from   = 80
+          to     = 80
+          proto    = "tcp"
+          cidr  = "0.0.0.0/0"
+          desc = "Allow incoming http traffic"
+        },
+        {
+          from   = 5432
+          to     = 5432
+          proto    = "tcp"
+          cidr  = "0.0.0.0/0"
+          desc = "Allow incoming postgress connection"
+        },
+    ]
 }
+
+variable "sg_egress" {
+    type = list(object({
+      from   = number
+      to    = number
+      proto    = string
+      cidr  = string
+      desc = string
+    }))
+    default     = [
+        {
+          from   = 0
+          to     = 0
+          proto    = "-1"
+          cidr  = "0.0.0.0/0"
+          desc = "Allow all outgoing traffic"
+        },
+    ]
+}
+
+
+#variable "sg_ingress" {
+#    type        = map(map(any))
+#    default     = {
+#        rule_1 = {from=80, to=80, proto="tcp", cidr="0.0.0.0/0", desc="test"}
+#        rule_2 = {from=5432, to=5432, proto="tcp", cidr="0.0.0.0/0", desc="test"}
+#        rule_2 = {from=5000, to=5000, proto="tcp", cidr="0.0.0.0/0", desc="test"}
+#        rule_2 = {from=3000, to=3000, proto="tcp", cidr="0.0.0.0/0", desc="test"}
+#    }
+#}
 
 variable "egress_proto" {
   default = "-1"
