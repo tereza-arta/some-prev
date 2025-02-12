@@ -11,6 +11,6 @@ variable "repo_name" {
 
 variable "df_context" {
   type = list(string)
-  default = ["./db", "./srv", "./fnt"]
+  default = ["app/db", "app/srv", "app/fnt"]
   description = "Relative path of appropriate app-component Dockerfilei"
 }
