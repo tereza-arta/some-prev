@@ -116,12 +116,12 @@ variable "sg_ingress" {
       desc = string
     }))
     default     = [
-        {
-          from   = 80
-          to     = 80
-          proto    = "tcp"
-          cidr  = "0.0.0.0/0"
-          desc = "Allow incoming http traffic"
+#        {
+#          from   = 80
+#          to     = 80
+#          proto    = "tcp"
+#          cidr  = "0.0.0.0/0"
+#          desc = "Allow incoming http traffic"
         },
         {
           from   = 5432
@@ -129,6 +129,20 @@ variable "sg_ingress" {
           proto    = "tcp"
           cidr  = "0.0.0.0/0"
           desc = "Allow incoming postgress connection"
+        },
+        {
+          from   = 5000
+          to     = 5000
+          proto    = "tcp"
+          cidr  = "0.0.0.0/0"
+          desc = "Allow incoming backend connection"
+        },
+        {
+          from   = 3000
+          to     = 3000
+          proto    = "tcp"
+          cidr  = "0.0.0.0/0"
+          desc = "Allow incoming frontend connection"
         },
     ]
 }

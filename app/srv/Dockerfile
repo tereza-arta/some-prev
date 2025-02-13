@@ -2,11 +2,11 @@ FROM node
 
 WORKDIR /app-dir
 
-COPY app/srv/source_code/package*.json ./
+COPY source_code/package*.json ./
 
 RUN npm install
 
-COPY app/srv/source_code/ .
+COPY source_code/ .
 
 EXPOSE 5000
 

@@ -37,7 +37,7 @@ resource "terraform_data" "docker_packaging" {
     command = <<EOF
     aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${data.aws_caller_identity.current.account_id}.dkr.ecr.eu-north-1.amazonaws.com
     docker build -t "${aws_ecr_repository.different[count.index].repository_url}:latest" -f "${var.df_context[count.index]}/Dockerfile" .
-    docker push "${aws_ecr_repository.different[count.index].repository_url}:latest"
+    docker push "${aws_ecr_repository.different[count.index].repository_url}:${var.image-tag}"
     EOF
   }
 
