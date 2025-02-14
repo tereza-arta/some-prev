@@ -116,13 +116,6 @@ variable "sg_ingress" {
       desc = string
     }))
     default     = [
-#        {
-#          from   = 80
-#          to     = 80
-#          proto    = "tcp"
-#          cidr  = "0.0.0.0/0"
-#          desc = "Allow incoming http traffic"
-        },
         {
           from   = 5432
           to     = 5432
@@ -145,6 +138,11 @@ variable "sg_ingress" {
           desc = "Allow incoming frontend connection"
         },
     ]
+}
+
+variable "ingress_tag" {
+  default = "Some ingress tag"
+  description = "Tag value of SG ingress rule"
 }
 
 variable "sg_egress" {
@@ -185,4 +183,9 @@ variable "egress_proto" {
 variable "egress_port" {
   type = number
   default = 0
+}
+
+variable "egress_tag" {
+  default = "Some egress tag"
+  description = "Tag value of SG egress rule"
 }

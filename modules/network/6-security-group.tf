@@ -38,7 +38,7 @@ resource "aws_vpc_security_group_ingress_rule" "ing" {
   referenced_security_group_id = var.sg_ingress[count.index].from == 3000 ? aws_security_group.for_lb.id : null
   
   tags = {
-    Name = "Some sg ingress tag"
+    Name = var.ingress_tag
   }
 }
 
@@ -51,6 +51,10 @@ resource "aws_vpc_security_group_egress_rule" "eg" {
   ip_protocol = var.sg_egress[count.index].proto
   cidr_ipv4 = var.sg_egress[count.index].cidr
   description = var.sg_egress[count.index].desc
+
+  tags = {
+    Name = var.egress_tag
+  }
 }
 
 

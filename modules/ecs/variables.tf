@@ -73,6 +73,12 @@ variable "app_port" {
   default = [5432, 5000, 3000]
 }
 
+variable "svc_name" {
+  type = list(string)
+  default = ["db-svc", "srv-svc", "fnt-svc"]
+  description = "Ecs service name for all app components"
+}
+
 variable "platform_version" {
   default = "LATEST"
   description = "Version of platform on which run task(s)"
@@ -107,4 +113,6 @@ variable "pub_ip" {
   description = "Assign public-ip to ENI or not"
 }
 
+variable "sec_groups" {}
 
+variable "subnets" {}
