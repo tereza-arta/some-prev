@@ -1,6 +1,11 @@
 variable "cluster_name" {
-  default = "app-cluster"
+  default = "mc"
   description = "Name of ecs cluster"
+}
+
+variable "role_cnt" {
+  type = number
+  default = 1
 }
 
 variable "role_name" {
@@ -8,15 +13,40 @@ variable "role_name" {
   description = "Name of ecs task exec-role"
 }
 
-variable "task_def_name" {
-  type = list(string)
-  default = ["db-task-def", "srv-task-def", "fnt-task-def"]
-  description = "List of task definitions name for app"
+variable "cluster_cnt" {
+  type = number
+  default = 1
+}
+
+variable "cluster_tag" {
+  default = "Cluster-tag-value"
+}
+
+variable "task_def_cnt" {
+  type = number
+  default = 1
+}
+
+variable "task_def_name" {}
+
+#variable "task_def_name" {
+#  type = list(string)
+#  default = ["srv-task-def", "fnt-task-def"]
+#  description = "List of task definitions name for app"
+#}
+
+variable "index" {
+  type = number
+  default = 0
 }
 
 variable "launch_type" {
   default = "FARGATE"
-  description = "Ecs launch-type"
+  description = "Ecs launch-type(default)"
+}
+
+variable "role_arn" {
+  default = "arn:aws:iam::637423489195:role/ecsTaskExecutionRole"
 }
 
 variable "net_mode" {
@@ -36,16 +66,12 @@ variable "task_memory" {
   description = "Amount of memory used by the task"
 }
 
-variable "cnt_name" {
-  type = list(string)
-  default = ["db-cnt", "srv-cnt", "fnt-cnt"]
-  description = "Name for containers for app components"
-}
+variable "cnt_name" {}
 
 variable "repo_url"{}
 
 #This must be same in ecr module variables
-variable "image-tag" {
+variable "image_tag" {
   default = "latest"
   description = "Default image tag for all ecr repos"
 }
@@ -69,15 +95,64 @@ variable "essential" {
 }
 
 variable "app_port" {
-  type = list(number)
-  default = [5432, 5000, 3000]
+  type = number
 }
 
-variable "svc_name" {
-  type = list(string)
-  default = ["db-svc", "srv-svc", "fnt-svc"]
-  description = "Ecs service name for all app components"
+variable "env_1" {
+  default = "PGUSER"
 }
+
+variable "env_2" {
+  default = "PGPASSWORD"
+}
+
+variable "env_3" {
+  default = "PGDATABASE"
+}
+
+variable "env_4" {
+  default = "PGHOST"
+}
+
+variable "env_5" {
+  default = "PGPORT"
+}
+
+variable "db_username" {}
+variable "db_password" {}
+variable "db_name" {}
+variable "db_host" {}
+
+variable "db_port" {
+  default = "5432"
+}
+
+variable "vpc_id" {}
+
+variable "sg_filter_name" {
+  default = "group-name"
+}
+
+variable "sg_filter_value" {
+  default = "*RDS*"
+}
+
+#variable "task_def_dependency" {}
+
+variable "svc_cnt" {
+  type = number
+  default = 1
+}
+
+variable "svc_name" {}
+
+variable "cluster_id_from_var" {
+  type = bool
+  default = false
+  description = "Get cluster-id from custom variable or not"
+}
+
+variable "cluster_id" {}
 
 variable "platform_version" {
   default = "LATEST"
@@ -113,6 +188,5 @@ variable "pub_ip" {
   description = "Assign public-ip to ENI or not"
 }
 
-variable "sec_groups" {}
-
-variable "subnets" {}
+variable "tg_arn" {}
+variable "cnt_port" {}

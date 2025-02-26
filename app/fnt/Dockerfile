@@ -1,26 +1,25 @@
 #Build stage
 FROM node AS builder
 
-#ARG REACT_APP_API_URL
-#ENV REACT_APP_API_URL $REACT_APP_API_URL
+ARG SRV_IP
 
 WORKDIR /app-dir
 
-#RUN sed -E -i'' "s/(.*API_URL=).*/\1$THEENV/" './source_code/.env'
 
-COPY source_code/package*.json ./
+COPY app/fnt/source_code/package*.json ./
 
 RUN npm i react-scripts@latest
 
-COPY source_code/ .
+COPY app/fnt/source_code/ .
 
 RUN npm run build
-    #sed -E -i'' "s/(.*API_URL=).*/\1$THEENV/" './.env'
+
+RUN sed -E -i'' "s/(.*API_URL=).*/\1${SRV_IP}/" './.env'
 
 #Final stage
 FROM nginx
 
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY app/fnt/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=builder /app-dir/build /usr/share/nginx/html
 

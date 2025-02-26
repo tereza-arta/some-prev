@@ -1,65 +1,134 @@
-variable "elb_name" {
+#Load balancer
+variable "lb_cnt" {
+  type = number
+  default = 2
+}
+
+variable "lb_name" {
   default = "Custom-lb"
 }
 
-variable "pub_subnets" {
-  #type        = any
-  description = "Get id from Public Subnets"
+variable "internal" {
+  type = bool
+  default = false
 }
 
-variable "sec_group" {
-  type        = any
-  description = "Get id from appropriate(lb) sec-group" 
+variable "lb_type" {
+  default = "application"
 }
 
-variable "listener_port" {
-  type    = number
-  default = 80
+variable "lb_sg" {}
+
+variable "subnets" {}
+
+variable "del_protect" {
+  type = bool
+  default = false
 }
 
-variable "listener_protocol" {
-  default = "http"
+variable "lb_tag" {
+  default = "some-lb-tag"
+}
+
+#Target group
+variable "tg_cnt" {
+  type = number
+  default = 2
+}
+
+variable "tg_name" {
+  default = "Custom-target-group"
+}
+
+variable "tg_port" {
+  type = list(number)
+  default = [5000, 3000]
+}
+
+variable "proto" {
+  default = "HTTP"
+}
+
+variable "target_type" {
+  default = "ip"
+}
+
+variable "vpc_id" {}
+
+variable "lb_algorithm" {
+  default = "round_robin"
+}
+
+variable "health_check" {
+  type = bool
+  default = true
+  description = "Enable health-checking or not"
 }
 
 variable "healthy_threshold" {
-  type    = number
+  type = number
   default = 2
 }
 
 variable "unhealthy_threshold" {
-  type    = number
+  type = number
   default = 2
 }
 
-variable "check_timeout" {
-  type    = number
-  default = 3
+variable "checking_path" {
+  default = "/"
 }
 
-variable "check_target" {
-  default = "HTTP:80/"
+variable "checking_port" {
+  type = number
+  default = "80"
 }
 
-variable "check_interval" {
-  type    = number
-  default = 30
+variable "checking_proto" {
+  default = "HTTP"
 }
 
-variable "cross_zone" {
-  type    = bool
-  default = true
+variable "tg_tag" {
+  default = "tg-tag"
 }
 
-variable "connection_draining" {
-  type    = bool
-  default = true
+#Listener
+variable "lb_listener_cnt" {
+  type = number
+  default = 2
 }
 
-variable "draining_timeout" {
-  type    = number
-  default = 400
+#variable "lb_index" {
+#  type = number
+#  default =
+#}
+
+variable "listener_port" {
+  type = list(string)
+  default = ["5000", "3000"]
 }
 
-variable "elb_tag" {
-  default = "Custom-alb"
+#variable "listener_proto" {
+#  default = "#{protocol}"
+#}
+
+variable "listener_proto" {
+  default = "HTTP"
 }
+
+variable "ssl" {
+  type = bool
+  default = false
+  description = "Attach certificate or not"
+}
+
+#variable "cert_arn" {}
+
+variable "listener_action_type" {
+  default = "forward"
+}
+
+variable "listener_tag" {
+  default = "listener-tag"
+}
+

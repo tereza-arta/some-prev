@@ -1,7 +1,7 @@
 resource "aws_ecr_repository" "different" {
   count = var.ecr_cnt
-  name = var.repo_name[count.index]
-  image_tag_mutability = "MUTABLE"
+  name = var.repo_name
+  image_tag_mutability = var.mutability
 }
 
 data "aws_caller_identity" "current" {}
@@ -30,51 +30,20 @@ resource "aws_ecr_lifecycle_policy" "example" {
 EOF
 }
 
-resource "terraform_data" "db_srv_dkr_pack" {
-  count = length(var.df_context) - 1
+resource "terraform_data" "dkr_pack" {
+  count = var.tf_data_dkr_pack ? 1 : 0
   provisioner "local-exec" {
     command = <<EOF
     aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${data.aws_caller_identity.current.account_id}.dkr.ecr.eu-north-1.amazonaws.com
-    docker build -t "${aws_ecr_repository.different[count.index].repository_url}:${var.image_tag}" -f "${var.df_context[count.index]}/Dockerfile" .
-    docker push "${aws_ecr_repository.different[count.index].repository_url}:${var.image_tag}"
+    a = var.build_arg
+    if [ !$a ]; then docker build -t "${aws_ecr_repository.different[var.index].repository_url}:${var.image_tag}" -f "${var.df_context}/Dockerfile" .
+    elif [ $a ]; then docker build --build-arg "SRV_IP=${var.api_url}" -t "${aws_ecr_repository.different[var.index].repository_url}:${var.image_tag}" -f "${var.df_context}/Dockerfile" .; fi
+    docker push "${aws_ecr_repository.different[var.index].repository_url}:${var.image_tag}"
     EOF
   }
   triggers_replace = {
     "run_at" = timestamp()
   }
-  depends_on = [aws_ecr_repository.different[count.index]]
+  #depends_on = [var.dkr_pack_dependency]
 }
 
-resource "terraform_data" "fnt_dkr_pack" {
-  provisioner "local-exec" {
-    command = <<EOF
-    aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${data.aws_caller_identity.current.account_id}.dkr.ecr.eu-north-1.amazonaws.com
-    docker build -t "${aws_ecr_repository.different[2].repository_url}:${var.image_tag}" -f "${var.df_context[2]}/Dockerfile" .
-    docker push "${aws_ecr_repository.different[2].repository_url}:${var.image_tag}"
-    EOF
-  }
-  triggers_replace = {
-    "run_at" = timestamp()
-  }
-  depends_on = [aws_ecr_repository.different[1]]
-}
-
-#resource "terraform_data" "docker_packaging" {
-#  count = var.ecr_cnt
-#
-#  provisioner "local-exec" {
-#    command = <<EOF
-#    aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${data.aws_caller_identity.current.account_id}.dkr.ecr.eu-north-1.amazonaws.com
-#    docker build -t "${aws_ecr_repository.different[count.index].repository_url}:latest" -f "${var.df_context[count.index]}/Dockerfile" .
-#    docker push "${aws_ecr_repository.different[count.index].repository_url}:${var.image-tag}"
-#    EOF
-#  }
-#
-#
-#  triggers_replace = {
-#    "run_at" = timestamp()
-#  }
-#
-#
-#  depends_on = [aws_ecr_repository.different]
-#}
